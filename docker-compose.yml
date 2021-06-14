@@ -1,0 +1,44 @@
+version: "3.3"
+
+services:
+    # Reverse proxy
+    reverseproxy:
+        image: nginx:alpine
+        container_name: nginx_reverse_proxy
+        volumes:
+        -   /home/developer/Desktop/reverse-proxy/nginx/nginx.conf:/etc/nginx/nginx.conf
+        #-   /home/developer/Desktop/reverse-proxy/nginx/fastcgi.conf:/etc/nginx/fastcgi.conf
+        #-   /home/developer/Desktop/reverse-proxy/nginx/proxy.conf:/etc/nginx/proxy.conf
+        #-   /home/developer/Desktop/reverse-proxy/nginx/mime.types:/etc/nginx/conf/mime.types
+        
+        ports:
+        -   80:80
+        restart: always
+        networks: 
+        -   my_env
+        links:
+        -   service-a
+        -   service-b
+
+    # My services
+    service-a:
+        container_name: service_a
+        build:
+            context: ./service-a
+            dockerfile: Dockerfile
+        image: service-a:latest
+        networks: 
+        -   my_env
+
+    service-b:
+        container_name: service_b
+        image: service-b:latest
+        build:
+            context: ./service-b
+            dockerfile: Dockerfile
+        networks: 
+        -   my_env
+
+networks:
+  my_env:
+    driver: bridge

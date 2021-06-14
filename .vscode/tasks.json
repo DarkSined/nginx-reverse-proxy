@@ -1,0 +1,20 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Run Reverse Proxy",
+            "type": "shell",
+            "command": "docker-compose up -d --build"
+        },
+        {
+            "label": "Restart Reverse Proxy",
+            "type": "shell",
+            "command": "docker-compose up -d"
+        },
+        {
+            "label": "Reload NGINX Configuration",
+            "type": "shell",
+            "command": "docker exec -it nginx_reverse_proxy nginx -s reload"
+        }
+    ]
+}
